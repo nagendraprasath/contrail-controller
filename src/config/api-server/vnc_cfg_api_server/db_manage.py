@@ -75,12 +75,15 @@ except ImportError:
     from vnc_cfg_ifmap import VncServerCassandraClient
 
 
-__version__ = "1.31"
+__version__ = "1.32"
 """
 NOTE: As that script is not self contained in a python package and as it
 supports multiple Contrail releases, it brings its own version that needs to be
 manually updated each time it is modified. We also maintain a change log list
 in that header:
+* 1.32:
+  - Fix CEM-17260. Use self._zk_client.delete instead of self.zk_delete as
+    it do not exists.
 * 1.31:
   - Fix a string comparision bug for Gateway IP String being "None" String
 * 1.30:
@@ -2848,7 +2851,7 @@ class DatabaseCleaner(DatabaseManager):
                     logger.info("Would delete zk: %s", path)
                 else:
                     logger.info("Deleting zk path: %s", path)
-                    self.zk_delete(path)
+                    self._zk_client.delete(path)
         return ret_errors
 
 
